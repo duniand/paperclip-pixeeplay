@@ -1,56 +1,54 @@
 # paperclip-pixeeplay
 
-Déploiement de [Paperclip](https://paperclip.ing) (orchestrateur open source d'agents IA, MIT) sur le VPS OVH de Pixeeplay via Coolify, et **company d'agents « Pixeeplay Studio »** : une agence tenue par des agents qui reçoit un brief métier + client et livre, versionne et redéploie la solution complète — site web, back-office, apps iOS/macOS/watchOS/tvOS/Android — en s'adaptant au concept, à la charte graphique, au métier et à la communication du client.
+Deployment of [Paperclip](https://paperclip.ing)—an open-source AI agent orchestrator (MIT license)—onto a Pixeeplay OVH VPS via Coolify, featuring the **"Pixeeplay Studio" agent company**: an agency run by AI agents that takes a business/client brief and delivers, versions, and redeploys a complete solution—including websites, back-offices, and apps for iOS, macOS, watchOS, tvOS, and Android—all while adapting to the client’s specific concept, visual identity, business domain, and communication style.
 
 ```
-deploy/      docker-compose.yml (Coolify), .env.example, COOLIFY.md (pas à pas), install-vps.sh (plan B SSH)
-company/     package Paperclip importable (spec agentcompanies/v1) : COMPANY.md, agents/, teams/, projects/, tasks/, skills/, .paperclip.yaml
-templates/   modèle de brief et exemple de brief normalisé (Maison Dupain)
+deploy/      docker-compose.yml (for Coolify), .env.example, COOLIFY.md (step-by-step guide), install-vps.sh (SSH fallback)
+company/     Importable Paperclip package (agentcompanies/v1 spec): COMPANY.md, agents/, teams/, projects/, tasks/, skills/, .paperclip.yaml
+templates/   Brief template and an example of a standardized brief (Maison Dupain)
 ```
 
-## Installer Paperclip
+## Installing Paperclip
 
-Suivre `deploy/COOLIFY.md` (≈ 10 min) : ressource *Docker Compose Empty* dans Coolify, domaine `paperclip.pixeeplay.com`, variables `CLAUDE_CODE_OAUTH_TOKEN` (abonnement Claude Max) et `GH_TOKEN`, premier admin via `pnpm paperclipai auth bootstrap-ceo`, puis verrouillage des inscriptions.
+Follow the instructions in `deploy/COOLIFY.md` (approx. 10 minutes): create a "Docker Compose Empty" resource in Coolify, set the domain to `paperclip.pixeeplay.com`, configure the `CLAUDE_CODE_OAUTH_TOKEN` (requires a Claude Max subscription) and `GH_TOKEN` variables, initialize the first admin account via `pnpm paperclipai auth bootstrap-ceo`, and then disable further registrations. ## Importing the Company
 
-## Importer la company
-
-Dans Paperclip → **Company → Import** → GitHub :
+In Paperclip → **Company → Import** → GitHub:
 
 ```
 https://github.com/pixeeplay/paperclip-pixeeplay/tree/main/company
 ```
 
-(Le dépôt doit être public pour l'import par URL ; sinon, depuis le terminal Coolify du service : `git clone` avec `GH_TOKEN` dans `/paperclip/import` puis `pnpm paperclipai company import /paperclip/import/company --target new --new-company-name "Pixeeplay Studio" --yes`.)
+(The repository must be public for URL-based import; otherwise, from the service's Coolify terminal: run `git clone` (using `GH_TOKEN`) into `/paperclip/import`, then execute `pnpm paperclipai company import /paperclip/import/company --target new --new-company-name "Pixeeplay Studio" --yes`.)
 
-Après import : renseigner les secrets company (`GH_TOKEN`, `COOLIFY_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_SERVER_UUID`, `COOLIFY_PROJECT_UUID`), tester l'adapter de chaque agent, activer le heartbeat du **CEO** (les autres se réveillent sur assignation), et déposer un premier brief dans le projet **Onboarding client**.
+After importing: configure the company secrets (`GH_TOKEN`, `COOLIFY_URL`, `COOLIFY_API_TOKEN`, `COOLIFY_SERVER_UUID`, `COOLIFY_PROJECT_UUID`), test the adapter for each agent, enable the **CEO**'s heartbeat (other agents wake up upon assignment), and submit an initial brief to the **Client Onboarding** project.
 
-## L'organisation
+## The Organization
 
-| Agent | Rôle | Modèle | Skills |
+| Agent | Role | Model | Skills |
 |---|---|---|---|
-| **Directeur de studio (CEO)** | reçoit les briefs, ouvre les dossiers, délègue, rend compte au board | Opus 5.5 | brief-metier-client, plan-de-fonctions-versioning |
-| **Chef de produit (CPO)** | plan de fonctions, feuille de versions, conformité promis/livré | Opus 5.5 | brief, plan-de-fonctions, qa-recette |
-| **Directeur artistique** | charte → tokens W3C → CSS/Swift/Kotlin, maquettes | Sonnet 5 | charte-graphique-client |
-| **Responsable communication** | ton, contenus, e-mails, fiches stores, SEO local, légal FR | Sonnet 5 | communication-metier |
-| **CTO** | architecture, dépôts, découpage, revue, fusion | Opus 5.5 | github-pr-workflow, site-factory-web, deploy-coolify-github |
-| **Lead Web** | Next.js + API + back-office, intégrations Odoo/PrestaShop/Pixee PIM | Sonnet 5 | site-factory-web |
-| **Lead Apple** | SwiftUI multi-cibles, CI macOS, TestFlight | Sonnet 5 | apple-multiplateforme |
-| **Lead Android** | Kotlin/Compose, CI, Play interne | Sonnet 5 | android-compose |
-| **DevOps & Release** | Coolify, domaines, versions/tags, changelog, veille | Sonnet 5 | deploy-coolify-github, plan-de-fonctions-versioning |
-| **QA** | recette avec preuves, verdict par critère | Sonnet 5 | qa-recette |
+| **Studio Director (CEO)** | Receives briefs, opens projects, delegates, reports to the board | Opus 5.5 | Client business brief, functional roadmap/versioning |
+| **Chief Product Officer (CPO)** | Functional roadmap, versioning schedule, promise-vs-delivery compliance | Opus 5.5 | Brief, functional roadmap, QA/acceptance testing |
+| **Art Director** | Brand guidelines → W3C tokens → CSS/Swift/Kotlin, mockups | Sonnet 5 | Client brand guidelines |
+| **Communications Manager** | Tone of voice, content, emails, app store listings, local SEO, French legal compliance | Sonnet 5 | Business communications |
+| **CTO** | Architecture, repositories, task breakdown, code review, merging | Opus 5.5 | github-pr-workflow, site-factory-web, deploy-coolify-github |
+| **Lead Web** | Next.js + API + back-office, Odoo/PrestaShop/Pixee PIM integrations | Sonnet 5 | site-factory-web |
+| **Lead Apple** | Multi-target SwiftUI, macOS CI, TestFlight | Sonnet 5 | apple-multiplateforme |
+| **Lead Android** | Kotlin/Compose, CI, internal Play Store track | Sonnet 5 | android-compose |
+| **DevOps & Release** | Coolify, domains, versions/tags, changelog, monitoring | Sonnet 5 | deploy-coolify-github, plan-de-fonctions-versioning |
+| **QA** | User acceptance testing (UAT) with evidence, verdict by criterion | Sonnet 5 | qa-recette |
 
-Deux pôles réimportables séparément : `teams/produit-design` (CPO + DA + Communication) et `teams/ingenierie` (CTO + leads + DevOps + QA).
+Two units that can be imported separately: `teams/produit-design` (CPO + Art Director + Communications) and `teams/ingenierie` (CTO + leads + DevOps + QA).
 
-## Flux « nouveau client »
+## "New Client" Workflow
 
-Brief déposé → `BRIEF.md` normalisé → `PLAN-FONCTIONS.md` + `VERSIONS.md` → `design/tokens.json` + `DESIGN.md` → `COMMUNICATION.md` + `content/` → dépôt `pixeeplay/client-<slug>` scaffoldé → site v0.1 sur `https://<slug>.pixeeplay.app` → apps si demandées → recette → approbation du board → production.
+Brief submitted → standardized `BRIEF.md` → `PLAN-FONCTIONS.md` + `VERSIONS.md` → `design/tokens.json` + `DESIGN.md` → `COMMUNICATION.md` + `content/` → `pixeeplay/client-<slug>` repository scaffolded → v0.1 site deployed at `https://<slug>.pixeeplay.app` → apps (if requested) → UAT → board approval → production.
 
-Tout ce qui coûte de l'argent, publie publiquement ou touche à la production d'un client existant passe par une approbation du board (Arnaud).
+Anything that incurs costs, involves public publishing, or affects the production environment of an existing client requires board approval (Arnaud).
 
-## Faire évoluer les skills
+## Evolving Skills
 
-Les skills sont des dossiers `SKILL.md` compatibles Agent Skills / skills.sh. Un nouveau métier ou un nouveau client réutilisable = un skill (ou une référence dans `brief-metier-client/references/familles-metier.md`) ajouté par PR ; Paperclip réimporte le package en mode `existing` (collision `replace`) pour le mettre à jour.
+Skills are defined as `SKILL.md` files, compatible with Agent Skills / skills.sh. A new business function or a new reusable client = a "skill" (or a reference in `brief-metier-client/references/familles-metier.md`) added via a PR; Paperclip re-imports the package in `existing` mode (using a `replace` collision strategy) to perform an update.
 
-## Licence
+## License
 
-MIT pour ce dépôt. Paperclip est © Paperclip Labs, Inc, MIT.
+MIT for this repository. Paperclip is © Paperclip Labs, Inc., MIT.
