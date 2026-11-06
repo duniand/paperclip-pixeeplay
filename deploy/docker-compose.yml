@@ -29,8 +29,8 @@ services:
       - PORT=3100
       - SERVE_UI=true
       - PAPERCLIP_HOME=/paperclip
-      - PAPERCLIP_INSTANCE_ID=pixeeplay
-      - TZ=Europe/Paris
+      - PAPERCLIP_INSTANCE_ID=duniand
+      - TZ=Asia/Jakarta
       - NODE_OPTIONS=--max-old-space-size=2048
       # --- Base de données ---------------------------------------------------
       - DATABASE_URL=postgres://paperclip:${SERVICE_PASSWORD_POSTGRES}@db:5432/paperclip
